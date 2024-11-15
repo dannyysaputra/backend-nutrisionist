@@ -59,7 +59,7 @@ export class AuthController {
 
     public static async login(req: Request, res: Response): Promise<Response> {
         console.log(req.body);
-        
+
         try {
             const { email, password } = req.body;
 
@@ -100,50 +100,56 @@ export class AuthController {
 
     public static async getCurrentUser(req: Request, res: Response): Promise<Response> {
         try {
-            // Assume that the token is passed in the Authorization header
-            const authHeader = req.headers.authorization;
-
-            if (!authHeader) {
-                return res.status(401).json({
-                    status: "Failed",
-                    message: "No token provided"
-                });
-            }
-
-            // Extract the token from the header
-            const token = authHeader.split(' ')[1];
-
-            // Verify and decode the token
-            const decodedUser = await userService.verifyToken(token);
-
-            if (!decodedUser) {
-                return res.status(401).json({
-                    status: "Failed",
-                    message: "Invalid or expired token"
-                });
-            }
-
-            // Find the user based on the ID from the decoded token
-            const user = await userService.findUserById(decodedUser.id);
-
-            if (!user) {
-                return res.status(404).json({
-                    status: "Failed",
-                    message: "User not found"
-                });
-            }
-
+            const user = await userService.checkUserFromToken(req.headers.authorization as string);
             return res.status(200).json({
                 status: "Success",
                 message: "User data retrieved successfully",
                 data: user
             });
-        } catch (error) {
-            console.error("Internal Error", error);
-            return res.status(500).json({
+        } catch (error: any) {
+            console.error("Get Current User Error:", error.message);
+            return res.status(error.message === "No token provided" ? 401 : 404).json({
                 status: "Failed",
-                message: "Internal server error"
+                message: error.message
             });
         }
     }
+
+    public static async updateUser(req: Request, res: Response): Promise<Response> {
+        try {
+            const user = await userService.checkUserFromToken(req.headers.authorization);
+
+            if (!user) {
+                res.status(404).json({ status: "Failed", message: "User not found" })
+            }
+
+            const { username, email, dob, gender } = req.body;
+            let avatarUrl;
+            if (req.file) {
+                const image = await uploadToCloudinary(req.file.buffer, req.file.mimetype, 'choco/avatar');
+                avatarUrl = image.secure_url;
+            }
+
+            const updatedUser = await userService.updateUser(user.id as unknown as string, {
+                username: username || user.username,
+                email: email || user.email,
+                dob: dob || user.dob,
+                gender: gender || user.gender,
+                avatar: avatarUrl || user.avatar
+            });
+
+            return res.status(200).json({
+                status: "Success",
+                message: "User updated successfully",
+                data: updatedUser
+            });
+        } catch (error: any) {
+            console.error("Update User Error:", error.message);
+            return res.status(error.message === "No token provided" ? 401 : 404).json({
+                status: "Failed",
+                message: error.message
+            });
+        }
+    }
+
 }

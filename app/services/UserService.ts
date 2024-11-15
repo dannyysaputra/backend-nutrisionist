@@ -49,4 +49,49 @@ export class UserService {
             updatedAt: user.updated_at
         });
     }
+
+    public async updateUser(userId: string, userData: Partial<UserType>): Promise<UserType | null> {
+        // Find the existing user
+        const existingUser = await this.userRepository.findById(userId);
+        
+        if (!existingUser) {
+            throw new Error('User not found');
+        }
+    
+        // Update user fields with new data if provided
+        const updatedUserData: Partial<UserType> = {
+            ...existingUser,
+            username: userData.username || existingUser.username,
+            email: userData.email || existingUser.email,
+            dob: userData.dob || existingUser.dob,
+            gender: userData.gender || existingUser.gender,
+            avatar: userData.avatar || existingUser.avatar,
+        };
+    
+        // Save the updated user data
+        const updatedUser = await this.userRepository.updateUser(userId, updatedUserData);
+        
+        return updatedUser;
+    }
+    
+    public async checkUserFromToken(authHeader: any): Promise<UserType> {
+        if (!authHeader) {
+            throw new Error("No token provided");
+        }
+    
+        const token = authHeader.split(' ')[1];
+        const decodedUser = await this.verifyToken(token);
+    
+        if (!decodedUser) {
+            throw new Error("Invalid or expired token");
+        }
+    
+        const user = await this.findUserById(decodedUser.id);
+        if (!user) {
+            throw new Error("User not found");
+        }
+
+        return user;
+    }
+    
 }
