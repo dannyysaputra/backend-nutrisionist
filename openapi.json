@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://api-web-stunting.up.railway.app/api/v1",
+      "url": "https://backend-nutrisionist-production.up.railway.app/api/v1",
       "description": "Deploy"
     },
     {

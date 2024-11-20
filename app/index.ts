@@ -5,6 +5,7 @@ import { Model } from "objection";
 import Knex from "knex";
 import cors from 'cors';
 import authRoute from '../routes/auth.route'
+import swaggerRoute from '../routes/swagger.route'
 
 const envPath = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: envPath });
@@ -23,7 +24,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(cors());
-
+app.use('/api/v1/', swaggerRoute);
 app.use('/api/v1/auth', authRoute);
 
 app.get("/", (req: Request, res: Response) => {
