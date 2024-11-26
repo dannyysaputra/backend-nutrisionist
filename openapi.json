@@ -365,6 +365,222 @@
           }
         }
       }
+    },
+    "/physical-data": {
+      "get": {
+        "summary": "Retrieve physical data for the current user",
+        "tags": ["Physical Data"],
+        "operationId": "getPhysicalDatas",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Physical data retrieved successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "Success" },
+                    "message": {
+                      "type": "string",
+                      "example": "Physical data was successfully retrieved"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/PhysicalData" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "post": {
+        "summary": "Create new physical data",
+        "tags": ["Physical Data"],
+        "operationId": "createPhysicalData",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhysicalDataInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Physical data created successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "Success" },
+                    "message": {
+                      "type": "string",
+                      "example": "Data successfully created"
+                    },
+                    "data": { "$ref": "#/components/schemas/PhysicalData" }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incomplete data"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    },
+    "/physical-data/{id}": {
+      "put": {
+        "summary": "Update physical data by ID",
+        "tags": ["Physical Data"],
+        "operationId": "updatePhysicalData",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Physical data ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PhysicalDataInput"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Physical data updated successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "Success" },
+                    "message": { "type": "string", "example": "Data updated" },
+                    "data": { "$ref": "#/components/schemas/PhysicalData" }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete physical data by ID",
+        "tags": ["Physical Data"],
+        "operationId": "deletePhysicalData",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Physical data ID",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Physical data deleted successfully",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": { "type": "string", "example": "Success" },
+                    "message": {
+                      "type": "string",
+                      "example": "Data deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found"
+          },
+          "500": {
+            "description": "Internal server error"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "PhysicalData": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "userId": { "type": "string" },
+          "weight": { "type": "number", "format": "float" },
+          "height": { "type": "number", "format": "float" },
+          "daily_activity": { "type": "string" },
+          "target_calory": { "type": "number", "format": "float" },
+          "target_protein": { "type": "number", "format": "float" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "PhysicalDataInput": {
+        "type": "object",
+        "properties": {
+          "weight": { "type": "number", "format": "float", "example": 70.5 },
+          "height": { "type": "number", "format": "float", "example": 175.2 },
+          "daily_activity": { "type": "string", "example": "Moderate" }
+        },
+        "required": ["weight", "height", "daily_activity"]
+      }
+    },
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
     }
   }
 }
