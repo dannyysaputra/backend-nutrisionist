@@ -5,8 +5,8 @@ export type UserType = {
     email: string;
     username: string;
     password: string | null;
-    dob: Date | null;
-    gender: string | null;
+    dob: Date;
+    gender: string;
     avatar: string | null;
     created_at: Date;
     updated_at: Date;
@@ -19,7 +19,7 @@ export class UserModel extends BaseModel {
     email!: string;
     username!: string;
     password!: string | null; // null for update profile
-    dob!: Date | null;
-    gender!: string | null;;
+    dob!: Date;
+    gender!: string;
     avatar!: string | null;
 }

@@ -5,7 +5,7 @@ export class UserRepository {
         return await UserModel.query().findOne({ email });
     }
 
-    public async findById(id: string): Promise<UserType | undefined> {
+    public async findById(id: number): Promise<UserType | undefined> {
         return await UserModel.query().findById(id);
     }
 
@@ -13,11 +13,11 @@ export class UserRepository {
         return await UserModel.query().insert(user);
     }
 
-    public async updateUser(id: string, user: Partial<UserType>): Promise<UserType> {
+    public async updateUser(id: number, user: Partial<UserType>): Promise<UserType> {
         return await UserModel.query().patchAndFetchById(id, user);
     }
 
-    public async deleteUser(id: string): Promise<number> {
+    public async deleteUser(id: number): Promise<number> {
         return await UserModel.query().deleteById(id);
     }
 }

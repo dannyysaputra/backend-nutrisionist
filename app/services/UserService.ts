@@ -20,7 +20,7 @@ export class UserService {
         return this.userRepository.findByEmail(email);
     }
 
-    public async findUserById(id: string): Promise<UserType | undefined> {
+    public async findUserById(id: number): Promise<UserType | undefined> {
         return this.userRepository.findById(id);
     }
 
@@ -50,7 +50,7 @@ export class UserService {
         });
     }
 
-    public async updateUser(userId: string, userData: Partial<UserType>): Promise<UserType | null> {
+    public async updateUser(userId: number, userData: Partial<UserType>): Promise<UserType | null> {
         // Find the existing user
         const existingUser = await this.userRepository.findById(userId);
         

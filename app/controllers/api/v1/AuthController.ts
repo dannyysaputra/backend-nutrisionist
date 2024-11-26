@@ -130,7 +130,7 @@ export class AuthController {
                 avatarUrl = image.secure_url;
             }
 
-            const updatedUser = await userService.updateUser(user.id as unknown as string, {
+            const updatedUser = await userService.updateUser(user.id, {
                 username: username || user.username,
                 email: email || user.email,
                 dob: dob || user.dob,

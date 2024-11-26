@@ -20,8 +20,15 @@ const commonConfig: Knex.Config = {
     },
     seeds: {
         directory: path.join(__dirname, 'database/seeds'),
-    }
+    },
 };
+
+export const onUpdateTrigger = (table: string) => `
+  CREATE TRIGGER ${table}_updated_at
+  BEFORE UPDATE ON ${table}
+  FOR EACH ROW
+  EXECUTE PROCEDURE on_update_timestamp();
+`;
 
 const config: { [key: string]: Knex.Config } = {
     development: {
@@ -53,7 +60,7 @@ const config: { [key: string]: Knex.Config } = {
             password: process.env.DB_PASSWORD,
             port: Number(process.env.DB_PORT)
         }
-    }
+    },
 };
 
 export default config;

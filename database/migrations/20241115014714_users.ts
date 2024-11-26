@@ -1,5 +1,5 @@
 import type { Knex } from "knex";
-
+import { onUpdateTrigger } from '../../knexfile';
 
 export async function up(knex: Knex): Promise<void> {
     await knex.schema.createTable('users', function (table) {
@@ -10,7 +10,10 @@ export async function up(knex: Knex): Promise<void> {
         table.date('dob').nullable();
         table.enu('gender', ['male', 'female']).nullable();
         table.string('avatar').nullable();
+        table.timestamps(true, true);
     })
+
+    await knex.raw(onUpdateTrigger('users'));
 }
 
 
