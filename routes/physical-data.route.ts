@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { PhysicalDataController } from "../app/controllers/api/v1/PhysicalDataController";
-import { authorize } from "../app/middlewares/autorize";
+import { authorize } from "../app/middlewares/authorize";
 
 const router = Router();
 

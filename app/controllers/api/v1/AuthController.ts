@@ -58,8 +58,6 @@ export class AuthController {
     }
 
     public static async login(req: Request, res: Response): Promise<Response> {
-        console.log(req.body);
-
         try {
             const { email, password } = req.body;
 

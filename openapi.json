@@ -15,6 +15,24 @@
       "description": "Local server"
     }
   ],
+  "tags": [
+    {
+      "name": "Users",
+      "description": "Operation related to users"
+    },
+    {
+      "name": "Daily Progress",
+      "description": "Operations related to daily progress data"
+    },
+    {
+      "name": "Food User",
+      "description": "Operation related to food users"
+    },
+    {
+      "name": "Physical Data",
+      "description": "Operation related to Physical data"
+    }
+  ],
   "paths": {
     "/auth/register": {
       "post": {
@@ -547,6 +565,486 @@
           }
         }
       }
+    },
+    "/food-user": {
+      "get": {
+        "summary": "Retrieve food user data for the current user",
+        "tags": ["Food User"],
+        "operationId": "getFoodUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved food user data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Food User successfully retrieved"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/FoodUser"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User ID not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create a new food user entry",
+        "tags": ["Food User"],
+        "operationId": "createFoodUser",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "example": "Apple"
+                  },
+                  "calory": {
+                    "type": "number",
+                    "example": 95
+                  },
+                  "carbohydrate": {
+                    "type": "number",
+                    "example": 25
+                  },
+                  "protein": {
+                    "type": "number",
+                    "example": 0.5
+                  },
+                  "fat": {
+                    "type": "number",
+                    "example": 0.3
+                  }
+                },
+                "required": ["name", "calory", "carbohydrate", "protein", "fat"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created a new food user entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data successfully created"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/FoodUser"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Incomplete data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Incomplete data"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User ID not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/food-user/{id}": {
+      "delete": {
+        "summary": "Delete a food user entry by ID",
+        "tags": ["Food User"],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "The ID of the food user entry to delete"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted the food user entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "Success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data deleted successfully"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Invalid id"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Data not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Data not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-progress": {
+      "get": {
+        "tags": ["Daily Progress"],
+        "summary": "Retrieve all daily progress data for the authenticated user",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved daily progress data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Daily progress was successfully retrieved"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/DailyProgress"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User ID not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "User id not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/daily-progress/{id}": {
+      "get": {
+        "tags": ["Daily Progress"],
+        "summary": "Retrieve a specific daily progress entry by ID",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "example": 1
+            },
+            "description": "The ID of the daily progress entry to retrieve"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the daily progress entry",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "success"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Daily progress was successfully retrieved"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/DailyProgress"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "ID not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Not found"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal server error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "status": {
+                      "type": "string",
+                      "example": "failed"
+                    },
+                    "message": {
+                      "type": "string",
+                      "example": "Error response"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -573,6 +1071,66 @@
           "daily_activity": { "type": "string", "example": "Moderate" }
         },
         "required": ["weight", "height", "daily_activity"]
+      },
+      "FoodUser": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "Apple"
+          },
+          "calory": {
+            "type": "number",
+            "example": 95
+          },
+          "carbohydrate": {
+            "type": "number",
+            "example": 25
+          },
+          "protein": {
+            "type": "number",
+            "example": 0.5
+          },
+          "fat": {
+            "type": "number",
+            "example": 0.3
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-11-26T14:37:00Z"
+          }
+        }
+      },
+      "DailyProgress": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "userId": {
+            "type": "integer",
+            "example": 123
+          },
+          "date": {
+            "type": "string",
+            "format": "date-time",
+            "example": "2024-11-26T14:37:00Z"
+          },
+          "consumed_protein": {
+            "type": "number",
+            "example": 150
+          },
+          "consumed_calory": {
+            "type": "number",
+            "example": 500
+          }
+        }
       }
     },
     "securitySchemes": {

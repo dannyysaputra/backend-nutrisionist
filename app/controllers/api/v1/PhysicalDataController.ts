@@ -16,7 +16,6 @@ export class PhysicalDataController {
                 data: datas
             })
         } catch (error: any) {
-            console.error(error);
             return res.status(500).json({
                 status: "Failed",
                 message: error.message
@@ -28,7 +27,6 @@ export class PhysicalDataController {
         try {
             const data = req.body;
             const userId = req.user?.id;
-            console.log(userId);
 
             if (!userId) {
                 return res.status(404).json({ status: "Failed", message: "User id not found" })

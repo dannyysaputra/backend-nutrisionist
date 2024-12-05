@@ -7,6 +7,8 @@ import cors from 'cors';
 import authRoute from '../routes/auth.route'
 import swaggerRoute from '../routes/swagger.route'
 import physicalDataRoute from '../routes/physical-data.route'
+import foodUserRoute from '../routes/food-user.route'
+import dailyProgressRoute from '../routes/daily-progress.route'
 
 const envPath = process.env.NODE_ENV === 'test' ? '.env.test' : '.env';
 dotenv.config({ path: envPath });
@@ -28,6 +30,8 @@ app.use(cors());
 app.use('/api/v1/', swaggerRoute);
 app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/physical-data', physicalDataRoute);
+app.use('/api/v1/food-user', foodUserRoute);
+app.use('/api/v1/daily-progress', dailyProgressRoute);
 
 app.get("/", (req: Request, res: Response) => {
   console.log(`Listening on http://localhost:${port}`);
