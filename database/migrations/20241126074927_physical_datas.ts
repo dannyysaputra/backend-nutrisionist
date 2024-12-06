@@ -9,7 +9,7 @@ export async function up(knex: Knex): Promise<void> {
         table.float('weight');
         table.float('height');
         table.enu('daily_activity', [
-            'sedentary', 'light', 'moderate', 'active', 'very active'
+            'sedentary', 'light', 'moderate', 'active', 'very_active'
         ]);
         table.float('target_calory');
         table.float('target_protein');
